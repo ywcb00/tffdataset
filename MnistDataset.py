@@ -1,4 +1,4 @@
-from dataset.IDataset import IDataset
+from tffdataset.IDataset import IDataset
 
 import logging
 import numpy as np

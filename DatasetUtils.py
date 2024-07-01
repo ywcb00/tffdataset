@@ -1,5 +1,5 @@
-from dataset.FloodNetDataset import FloodNetDataset
-from dataset.MnistDataset import MnistDataset
+from tffdataset.FloodNetDataset import FloodNetDataset
+from tffdataset.MnistDataset import MnistDataset
 
 from enum import Enum
 

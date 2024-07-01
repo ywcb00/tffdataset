@@ -1,4 +1,4 @@
-from dataset.IDataset import IDataset
+from tffdataset.IDataset import IDataset
 
 import csv
 import logging
