@@ -17,6 +17,12 @@ class FloodNetDataset(IDataset):
                 # 8, # Pool
             ], dtype=tf.uint32),
         "flooded_threshold": 1/4,
+
+        "force_load": False,
+
+        "train_response_path": "./data/train_response.csv",
+        "val_response_path": "./data/val_response.csv",
+        "test_response_path": "./data/test_response.csv",
     }
 
     def __init__(self, config):
@@ -72,9 +78,9 @@ class FloodNetDataset(IDataset):
         train_response = dict()
         val_response = dict()
         test_response = dict()
-        if(not config["force_load"] and os.path.exists(config["train_response_path"])
-            and os.path.exists(config["val_response_path"])
-            and os.path.exists(config["test_response_path"])):
+        if(not self_class.dataset_config["force_load"] and os.path.exists(self_class.dataset_config["train_response_path"])
+            and os.path.exists(self_class.dataset_config["val_response_path"])
+            and os.path.exists(self_class.dataset_config["test_response_path"])):
             train_response, val_response, test_response = self_class.readResponse(config)
         else:
             train_response, val_response, test_response = self_class.loadResponse(config)
@@ -158,17 +164,17 @@ class FloodNetDataset(IDataset):
         test_response = dict(zip(test_fnames, test_response))
 
         # write the computed binary responses to disk for later usage
-        with open(config["train_response_path"], "w") as csvfile:
+        with open(self_class.dataset_config["train_response_path"], "w") as csvfile:
             writer = csv.writer(csvfile)
             writer.writerow(["fname", "response"])
             for key, val in train_response.items():
                 writer.writerow([key, val])
-        with open(config["val_response_path"], "w") as csvfile:
+        with open(self_class.dataset_config["val_response_path"], "w") as csvfile:
             writer = csv.writer(csvfile)
             writer.writerow(["fname", "response"])
             for key, val in val_response.items():
                 writer.writerow([key, val])
-        with open(config["test_response_path"], "w") as csvfile:
+        with open(self_class.dataset_config["test_response_path"], "w") as csvfile:
             writer = csv.writer(csvfile)
             writer.writerow(["fname", "response"])
             for key, val in test_response.items():
@@ -179,19 +185,19 @@ class FloodNetDataset(IDataset):
     @classmethod
     def readResponse(self_class, config):
         train_response = dict()
-        with open(config["train_response_path"], "r") as csvfile:
+        with open(self_class.dataset_config["train_response_path"], "r") as csvfile:
             reader = csv.reader(csvfile)
             next(reader) # omit the header
             for row in reader:
                 train_response[row[0]] = (row[1] == "True")
         val_response = dict()
-        with open(config["val_response_path"], "r") as csvfile:
+        with open(self_class.dataset_config["val_response_path"], "r") as csvfile:
             reader = csv.reader(csvfile)
             next(reader) # omit the header
             for row in reader:
                 val_response[row[0]] = (row[1] == "True")
         test_response = dict()
-        with open(config["test_response_path"], "r") as csvfile:
+        with open(self_class.dataset_config["test_response_path"], "r") as csvfile:
             reader = csv.reader(csvfile)
             next(reader) # omit the header
             for row in reader:
