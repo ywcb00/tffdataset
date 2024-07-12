@@ -5,6 +5,9 @@ import numpy as np
 import tensorflow as tf
 
 class MnistDataset(IDataset):
+    element_spec = (tf.TensorSpec(shape=(None, 28, 28, 1), dtype=tf.float32),
+        tf.TensorSpec(shape=(None, 10), dtype=tf.float32))
+
     def __init__(self, config):
         super().__init__(config, batch_size=30)
         self.logger = logging.getLogger("dataset/MnistDataset")

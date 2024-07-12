@@ -13,3 +13,14 @@ def getDataset(config):
             return FloodNetDataset(config)
         case DatasetID.Mnist:
             return MnistDataset(config)
+        case _:
+            raise NotImplementedError
+
+def getDatasetElementSpec(config):
+    match config["dataset_id"]:
+        case DatasetID.FloodNet:
+            return FloodNetDataset.element_spec
+        case DatasetID.Mnist:
+            return MnistDataset.element_spec
+        case _:
+            raise NotImplementedError

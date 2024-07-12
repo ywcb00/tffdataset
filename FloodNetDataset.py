@@ -6,6 +6,19 @@ import os
 import tensorflow as tf
 
 class FloodNetDataset(IDataset):
+    element_spec = (tf.TensorSpec(shape=(None, 3000, 3000, 3), dtype=tf.float32,),
+        tf.TensorSpec(shape=(None,), dtype=tf.bool))
+
+    dataset_config = {
+        "flooded_classes": tf.constant([
+                1, # Building-flooded
+                3, # Road-flooded
+                5, # Water
+                # 8, # Pool
+            ], dtype=tf.uint32),
+        "flooded_threshold": 1/4,
+    }
+
     def __init__(self, config):
         super().__init__(config, batch_size=2)
         self.logger = logging.getLogger("dataset/FloodNetDataset")
@@ -92,11 +105,11 @@ class FloodNetDataset(IDataset):
             counts = tf.map_fn(
                 fn = lambda fc: tf.reduce_sum(tf.cast(tf.equal(tf.cast(
                     tf.round(tf.reshape(img, [-1])), tf.uint32), fc), tf.uint32)),
-                elems = config["flooded_classes"])
+                elems = self_class.dataset_config["flooded_classes"])
             flooded_count = tf.reduce_sum(counts)
             # return True if the count of flooded pixels exceeds the specified threshold
             return tf.greater(flooded_count, tf.cast(tf.multiply(tf.cast(tf.size(img), tf.float32),
-                    config["flooded_threshold"]), tf.uint32))
+                    self_class.dataset_config["flooded_threshold"]), tf.uint32))
 
         # read the response label images from disk
         train_labels_dir = "./data/FloodNet-Supervised_v1.0/train/train-label-img/"
