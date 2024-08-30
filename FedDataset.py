@@ -36,11 +36,11 @@ class FedDataset():
         n_workers = config["num_workers"]
         match config["part_scheme"]:
             case PartitioningScheme.RANGE:
-                data_parts = partitionDataRange(data, n_workers)
+                data_parts = self_class.partitionDataRange(data, n_workers)
                 return data_parts
             case PartitioningScheme.RANDOM:
                 data.shuffle(data.cardinality(), seed=config["seed"])
-                data_parts = partitionDataRange(data, n_workers)
+                data_parts = self_class.partitionDataRange(data, n_workers)
                 return data_parts
             case PartitioningScheme.ROUND_ROBIN:
                 data_parts = [data.shard(n_workers, w_idx) for w_idx in range(n_workers)]
