@@ -39,11 +39,10 @@ class FedDataset():
                 data_parts = self_class.partitionDataRange(data, n_workers)
                 return data_parts
             case PartitioningScheme.RANDOM:
-                data.shuffle(data.cardinality(), seed=config["seed"])
-                data_parts = self_class.partitionDataRange(data, n_workers)
+                data_parts = self_class.partitionDataRandom(data, n_workers, config["seed"])
                 return data_parts
             case PartitioningScheme.ROUND_ROBIN:
-                data_parts = [data.shard(n_workers, w_idx) for w_idx in range(n_workers)]
+                data_parts = self_class.partitionDataRoundRobin(data, n_workers)
                 return data_parts
 
     @classmethod
@@ -56,4 +55,15 @@ class FedDataset():
             data.skip(num_elements)
             num_elements = (n_rows // n_workers) + distribute_remainder(w_idx)
             data_parts.append(data.take(num_elements))
+        return data_parts
+
+    @classmethod
+    def partitionDataRandom(self_class, data, n_workers, seed):
+        data.shuffle(data.cardinality(), seed=seed)
+        data_parts = self_class.partitionDataRange(data, n_workers)
+        return data_parts
+
+    @classmethod
+    def partitionDataRoundRobin(self_class, data, n_workers):
+        data_parts = [data.shard(n_workers, w_idx) for w_idx in range(n_workers)]
         return data_parts
