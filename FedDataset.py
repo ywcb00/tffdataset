@@ -17,7 +17,7 @@ class FedDataset():
 
     def construct(self, dataset):
         self.logger.info(f'Partitioning the dataset to {self.config["num_workers"]} ' +
-            f'partitions with {self.config["part_scheme"].name} scheme')
+            f'partitions with {self.config["partitioning_scheme"].name} scheme')
         # partition the data
         self.train = self.partitionData(dataset.train, self.config)
         self.val = self.partitionData(dataset.val, self.config)
@@ -34,7 +34,7 @@ class FedDataset():
     @classmethod
     def partitionData(self_class, data, config):
         n_workers = config["num_workers"]
-        match config["part_scheme"]:
+        match config["partitioning_scheme"]:
             case PartitioningScheme.RANGE:
                 data_parts = self_class.partitionDataRange(data, n_workers)
                 return data_parts
