@@ -15,13 +15,13 @@ class FedDataset():
         self.logger = logging.getLogger("dataset/FedDataset")
         self.logger.setLevel(config["log_level"])
 
-    def construct(self, dataset):
+    def construct(self, dataset, seed=None):
         self.logger.info(f'Partitioning the dataset to {self.config["num_workers"]} ' +
             f'partitions with {self.config["partitioning_scheme"].name} scheme')
         # partition the data
-        self.train = self.partitionData(dataset.train, self.config)
-        self.val = self.partitionData(dataset.val, self.config)
-        self.test = self.partitionData(dataset.test, self.config)
+        self.train = self.partitionData(dataset.train, self.config, seed=seed)
+        self.val = self.partitionData(dataset.val, self.config, seed=seed)
+        self.test = self.partitionData(dataset.test, self.config, seed=seed)
         self.batch_size = dataset.batch_size
 
     def batch(self):
@@ -32,14 +32,16 @@ class FedDataset():
 
     # ===== partitioning =====
     @classmethod
-    def partitionData(self_class, data, config):
+    def partitionData(self_class, data, config, seed=None):
+        if(not seed):
+            seed = config["seed"]
         n_workers = config["num_workers"]
         match config["partitioning_scheme"]:
             case PartitioningScheme.RANGE:
                 data_parts = self_class.partitionDataRange(data, n_workers)
                 return data_parts
             case PartitioningScheme.RANDOM:
-                data_parts = self_class.partitionDataRandom(data, n_workers, config["seed"])
+                data_parts = self_class.partitionDataRandom(data, n_workers, seed)
                 return data_parts
             case PartitioningScheme.ROUND_ROBIN:
                 data_parts = self_class.partitionDataRoundRobin(data, n_workers)

@@ -9,7 +9,7 @@ class IDataset(ABC):
         self.batch_size = batch_size # set this member when calling the parent constructor
 
     @abstractmethod
-    def load(self):
+    def load(self, seed=None):
         pass
 
     def batch(self):

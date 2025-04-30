@@ -30,8 +30,10 @@ class FloodNetDataset(IDataset):
         self.logger = logging.getLogger("dataset/FloodNetDataset")
         self.logger.setLevel(config["log_level"])
 
-    def load(self):
-        train, val, test = self.getDataset(self.config)
+    def load(self, seed=None):
+        if(not seed):
+            seed = self.config["seed"]
+        train, val, test = self.getDataset(self.config, seed=seed)
         self.train = train
         self.val = val
         self.test = test
@@ -39,7 +41,7 @@ class FloodNetDataset(IDataset):
             + f'validation instances, and {test.cardinality().numpy()} test instances.')
 
     @classmethod
-    def getDataset(self_class, config):
+    def getDataset(self_class, config, seed=None):
         train_dir = "./data/FloodNet-Supervised_v1.0/train/train-org-img/"
         val_dir = "./data/FloodNet-Supervised_v1.0/val/val-org-img/"
         test_dir = "./data/FloodNet-Supervised_v1.0/test/test-org-img/"

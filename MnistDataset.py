@@ -13,8 +13,10 @@ class MnistDataset(IDataset):
         self.logger = logging.getLogger("dataset/MnistDataset")
         self.logger.setLevel(config["log_level"])
 
-    def load(self):
-        train, val, test = self.getDataset(self.config)
+    def load(self, seed=None):
+        if(not seed):
+            seed = self.config["seed"]
+        train, val, test = self.getDataset(self.config, seed=seed)
         self.train = train
         self.val = val
         self.test = test
@@ -22,7 +24,7 @@ class MnistDataset(IDataset):
             + f'validation instances, and {test.cardinality().numpy()} test instances.')
 
     @classmethod
-    def getDataset(self_class, config):
+    def getDataset(self_class, config, seed=None):
         num_classes = 10
 
         (x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
@@ -50,6 +52,6 @@ class MnistDataset(IDataset):
 
         # split train dataset into train and validation set
         train, val = tf.keras.utils.split_dataset(train, left_size=0.9, right_size=None,
-            shuffle=True, seed=config["seed"])
+            shuffle=True, seed=seed)
 
         return train, val, test
