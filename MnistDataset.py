@@ -5,6 +5,7 @@ import numpy as np
 import tensorflow as tf
 
 class MnistDataset(IDataset):
+    num_classes = 10
     element_spec = (tf.TensorSpec(shape=(None, 28, 28, 1), dtype=tf.float32),
         tf.TensorSpec(shape=(None, 10), dtype=tf.float32))
 
@@ -25,8 +26,6 @@ class MnistDataset(IDataset):
 
     @classmethod
     def getDataset(self_class, config, seed=None):
-        num_classes = 10
-
         (x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
 
         # scale the image values to [0, 1]
@@ -43,8 +42,8 @@ class MnistDataset(IDataset):
         x_test = np.expand_dims(x_test, -1)
 
         # one-hot encode the labels
-        y_train = tf.keras.utils.to_categorical(y_train, num_classes)
-        y_test = tf.keras.utils.to_categorical(y_test, num_classes)
+        y_train = tf.keras.utils.to_categorical(y_train, self_class.num_classes)
+        y_test = tf.keras.utils.to_categorical(y_test, self_class.num_classes)
 
         # concatenate images with labels
         train = tf.data.Dataset.from_tensor_slices((x_train, y_train))

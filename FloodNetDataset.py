@@ -6,6 +6,7 @@ import os
 import tensorflow as tf
 
 class FloodNetDataset(IDataset):
+    num_classes = 2 # either flooded or not flooded
     element_spec = (tf.TensorSpec(shape=(None, 3000, 3000, 3), dtype=tf.float32,),
         tf.TensorSpec(shape=(None,), dtype=tf.bool))
 
