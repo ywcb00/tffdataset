@@ -56,7 +56,7 @@ class FedDataset():
                 return data_parts
             case PartitioningScheme.DIRICHLET:
                 data_parts = self_class.partitionDataDirichlet(data, n_workers,
-                    n_classes, config["partitioning_dirichlet_alpha"], seed, logger)
+                    n_classes, config["partitioning_alpha"], seed, logger)
                 return data_parts
 
     @classmethod
