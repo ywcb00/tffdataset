@@ -12,7 +12,6 @@ class IDataset(ABC):
     def load(self, seed=None):
         pass
 
+    @abstractmethod
     def batch(self):
-        self.train = self.train.batch(self.batch_size)
-        self.val = self.val.batch(self.batch_size)
-        self.test = self.test.batch(self.batch_size)
+        pass

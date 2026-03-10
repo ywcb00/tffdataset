@@ -1,4 +1,4 @@
-from tffdataset.IDataset import IDataset
+from tffdataset.ITensorFlowDataset import ITensorFlowDataset
 
 import csv
 import logging
@@ -7,10 +7,8 @@ import pandas as pd
 from pathlib import Path
 import tensorflow as tf
 
-class IrisDataset(IDataset):
-    num_classes = 3 # either flooded or not flooded
-    element_spec = (tf.TensorSpec(shape=(None, 3000, 3000, 3), dtype=tf.float32,),
-        tf.TensorSpec(shape=(None,), dtype=tf.bool))
+class IrisDataset(ITensorFlowDataset):
+    num_classes = 3
     element_spec = (tf.TensorSpec(shape=(None, 4), dtype=tf.float32),
         tf.TensorSpec(shape=(None, 3), dtype=tf.float32))
 

@@ -1,10 +1,10 @@
-from tffdataset.IDataset import IDataset
+from tffdataset.ITensorFlowDataset import ITensorFlowDataset
 
 import logging
 import numpy as np
 import tensorflow as tf
 
-class MnistDataset(IDataset):
+class MnistDataset(ITensorFlowDataset):
     num_classes = 10
     element_spec = (tf.TensorSpec(shape=(None, 28, 28, 1), dtype=tf.float32),
         tf.TensorSpec(shape=(None, 10), dtype=tf.float32))

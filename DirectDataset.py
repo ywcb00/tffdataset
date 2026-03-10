@@ -1,8 +1,8 @@
-from tffdataset.IDataset import IDataset
+from tffdataset.ITensorFlowDataset import ITensorFlowDataset
 
 import logging
 
-class DirectDataset(IDataset):
+class DirectDataset(ITensorFlowDataset):
     def __init__(self, batch_size, element_spec, train, val, test, config):
         super().__init__(config, batch_size=batch_size)
         self.logger = logging.getLogger("dataset/DirectDataset")

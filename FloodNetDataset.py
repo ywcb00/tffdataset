@@ -1,11 +1,11 @@
-from tffdataset.IDataset import IDataset
+from tffdataset.ITensorFlowDataset import ITensorFlowDataset
 
 import csv
 import logging
 import os
 import tensorflow as tf
 
-class FloodNetDataset(IDataset):
+class FloodNetDataset(ITensorFlowDataset):
     num_classes = 2 # either flooded or not flooded
     element_spec = (tf.TensorSpec(shape=(None, 3000, 3000, 3), dtype=tf.float32,),
         tf.TensorSpec(shape=(None,), dtype=tf.bool))
