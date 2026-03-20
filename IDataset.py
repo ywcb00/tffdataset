@@ -15,3 +15,15 @@ class IDataset(ABC):
     @abstractmethod
     def batch(self):
         pass
+
+    @abstractmethod
+    def trainSize(self):
+        pass
+
+    @abstractmethod
+    def valSize(self):
+        pass
+    
+    @abstractmethod
+    def testSize(self):
+        pass
