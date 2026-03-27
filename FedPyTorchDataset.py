@@ -102,7 +102,7 @@ class FedPyTorchDataset(IFedDataset):
         return partitions
 
     def getPartition(self, partition_index):
-        partition_dataset = DirectPyTorchDataset(self.batch_size, None,
+        partition_dataset = DirectPyTorchDataset(self.batch_size, self.element_spec,
             self.train[partition_index],
             self.val[partition_index],
             self.test[partition_index],

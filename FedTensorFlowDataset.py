@@ -1,3 +1,4 @@
+from tffdataset.DirectTensorFlowDataset import DirectTensorFlowDataset
 from tffdataset.IFedDataset import IFedDataset
 
 import logging
@@ -101,3 +102,11 @@ class FedTensorFlowDataset(IFedDataset):
             pd.DataFrame.from_dict(partition_assigned_classes).sort_index().to_string())
 
         return partitions
+
+    def getPartition(self, partition_index):
+        partition_dataset = DirectTensorFlowDataset(self.batch_size, self.element_spec,
+            self.train[partition_index],
+            self.val[partition_index],
+            self.test[partition_index],
+            self.config)
+        return partition_dataset

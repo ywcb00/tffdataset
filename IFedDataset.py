@@ -38,6 +38,8 @@ class IFedDataset(ABC):
             seed=seed, logger=self.logger)
         self.test = self.partitionData(dataset.test, self.config, dataset.num_classes,
             seed=seed, logger=self.logger)
+        # set the element specification and batch size
+        self.element_spec = dataset.element_spec
         self.batch_size = dataset.batch_size
 
     @abstractmethod
@@ -85,4 +87,8 @@ class IFedDataset(ABC):
     @abstractmethod
     def partitionDataDirichlet(self_class, data, n_partitions, n_classes, alpha,
         seed, logger):
+        pass
+
+    @abstractmethod
+    def getPartition(self, partition_index):
         pass
